@@ -1,0 +1,6 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "python3 /absolute/path/to/configurable-claude-status-bar/statusline-command.py"
+  }
+}
