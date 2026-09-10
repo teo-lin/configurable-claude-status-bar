@@ -1,0 +1,35 @@
+README.md
+  s_baee4bd0cd458d::t_fb2f15eeff977b 2-54
+settings.example.json
+  s_baee4bd0cd458d::t_a8b4cc296989bf 1-6
+statusline-command.py
+  s_baee4bd0cd458d::t_959a63b7d7b070 1-375
+.serena/.gitignore
+  s_2f86d1bd300a69::t_4972fff5df055c 1-2
+.serena/project.yml
+  s_2f86d1bd300a69::t_b57b0481c9bb19 1-132
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a13a29f04d7c3748584827b991e894539b89c8ce",
+  "prompts": {},
+  "sessions": {
+    "s_2f86d1bd300a69": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9b80056c-db37-44c5-b54c-2f95ccae87e7",
+        "model": "unknown"
+      },
+      "human_author": "teolin <teolin@gmail.com>"
+    },
+    "s_baee4bd0cd458d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aced0abc-f70d-4895-8f2e-6fc514ae6c4c",
+        "model": "claude-opus-5"
+      },
+      "human_author": "teolin <teolin@gmail.com>"
+    }
+  }
+}
