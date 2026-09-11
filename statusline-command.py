@@ -6,10 +6,10 @@ Display order, left to right, with the toggle that controls each part:
   /1000k             window size added after the tokens used             SHOW_CONTEXT_WINDOW_SIZE
   77% / 82% / 7%     percent numbers on all three usage parts            SHOW_USAGE_PERCENTAGES
   77% ██████░░░░     context window percent and bar                      SHOW_CONTEXT_USAGE
-  5h:82% ████░░      5-hour limit percent and bar                        SHOW_FIVE_HOUR_LIMIT
-  7d:7% ░░░░░░░░░░   7-day limit percent and bar                         SHOW_SEVEN_DAY_LIMIT
+  5h:8% ████░░       5-hour limit remaining percent and bar             SHOW_FIVE_HOUR_LIMIT
+  7d:4% ░░░░░░░░░░   7-day limit remaining percent and bar              SHOW_SEVEN_DAY_LIMIT
   21:30 / 17.09      reset time / date, only above the threshold         SHOW_LIMIT_RESET, RESET_THRESHOLD_PERCENT
-  12:20 92%          percent joins the inside label when very full       PERCENT_INSIDE_BAR_THRESHOLD
+  12:20  92%         percent joins the inside label from 91% used
                      reset drawn inside the filled bar when it fits      SHOW_RESET_INSIDE_BAR
   stone face         caveman mode is active                              SHOW_CAVEMAN_MODE
   shell              folder has a .serena directory                      SHOW_SERENA_MARKER
@@ -42,7 +42,6 @@ SHOW_FIVE_HOUR_LIMIT = True
 SHOW_SEVEN_DAY_LIMIT = True
 SHOW_LIMIT_RESET = True
 RESET_THRESHOLD_PERCENT = 70
-PERCENT_INSIDE_BAR_THRESHOLD = 90
 SHOW_RESET_INSIDE_BAR = True
 SHOW_CAVEMAN_MODE = True
 SHOW_SERENA_MARKER = True
@@ -196,10 +195,10 @@ def session_output_tokens(path):
         return 0
     return total
 
-def with_percent(label, percent, pct, width=10):
-    if not label or percent < PERCENT_INSIDE_BAR_THRESHOLD:
+def with_percent(label, percent, pct, width=10, gate=None):
+    if not label or (percent if gate is None else gate) < 91:
         return label
-    combined = f"{label} {percent}%"
+    combined = f"{label}  {percent}%"
     return combined if len(combined) <= filled_cells(pct, width) else label
 
 def make_bar(pct, width=10, label=''):
@@ -282,8 +281,10 @@ if SHOW_FIVE_HOUR_LIMIT and five_hr_pct is not None:
     bc = bar_color(five_hr_pct)
     show_reset = SHOW_LIMIT_RESET and fh > RESET_THRESHOLD_PERCENT
     reset_label = format_reset(five_hr_reset) if show_reset else ''
-    percent_text = f"{bc}{fh}%" if SHOW_USAGE_PERCENTAGES else ''
-    inside_label = with_percent(reset_label, fh, five_hr_pct)
+    left = max(0, 100 - fh)
+    show_left = SHOW_USAGE_PERCENTAGES and fh >= 91
+    percent_text = f"{bc}{left}%" if show_left else ''
+    inside_label = with_percent(reset_label, left, five_hr_pct, gate=fh)
     inside = SHOW_RESET_INSIDE_BAR and reset_label and len(inside_label) <= filled_cells(five_hr_pct)
     reset_suffix = f" {DIM}{reset_label}{RESET}" if (reset_label and not inside) else ''
     bar = make_bar(five_hr_pct, width=10, label=inside_label if inside else '')
@@ -295,8 +296,10 @@ if SHOW_SEVEN_DAY_LIMIT and week_pct is not None:
     bc = bar_color(week_pct)
     show_reset = SHOW_LIMIT_RESET and wk > RESET_THRESHOLD_PERCENT
     reset_label = format_reset(week_reset, '%d.%m') if show_reset else ''
-    percent_text = f"{bc}{wk}%" if SHOW_USAGE_PERCENTAGES else ''
-    inside_label = with_percent(reset_label, wk, week_pct)
+    left = max(0, 100 - wk)
+    show_left = SHOW_USAGE_PERCENTAGES and wk >= 91
+    percent_text = f"{bc}{left}%" if show_left else ''
+    inside_label = with_percent(reset_label, left, week_pct, gate=wk)
     inside = SHOW_RESET_INSIDE_BAR and reset_label and len(inside_label) <= filled_cells(week_pct)
     reset_suffix = f" {DIM}{reset_label}{RESET}" if (reset_label and not inside) else ''
     bar = make_bar(week_pct, width=10, label=inside_label if inside else '')
