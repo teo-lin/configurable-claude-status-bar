@@ -1,0 +1,19 @@
+statusline-command.py
+  s_d88b9ea0ceaca5::t_6203d894094783 9-10,12,198-199,201,284-287,299-302
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "b4b7e97c761a26c9323232ff31e9567272124579",
+  "prompts": {},
+  "sessions": {
+    "s_d88b9ea0ceaca5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a27f2ed9-f1cb-40aa-a742-5c584aaf39bd",
+        "model": "claude-opus-5"
+      },
+      "human_author": "teolin <teolin@gmail.com>"
+    }
+  }
+}
